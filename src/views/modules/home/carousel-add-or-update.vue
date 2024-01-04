@@ -116,7 +116,7 @@
         } else {
           this.$message.error(response.msg)
         }
-      },
+      }
     }
   }
 </script>

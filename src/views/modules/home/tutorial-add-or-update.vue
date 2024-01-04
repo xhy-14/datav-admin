@@ -4,9 +4,6 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="文件ID" prop="fileId">
-      <el-input v-model="dataForm.fileId" placeholder="文件ID"></el-input>
-    </el-form-item>
     <el-form-item label="小标题" prop="title">
       <el-input v-model="dataForm.title" placeholder="小标题"></el-input>
     </el-form-item>
@@ -16,14 +13,20 @@
     <el-form-item label="步骤顺序" prop="step">
       <el-input v-model="dataForm.step" placeholder="步骤顺序"></el-input>
     </el-form-item>
-    <el-form-item label="是否删除，默认为0表示未删除" prop="isDelete">
-      <el-input v-model="dataForm.isDelete" placeholder="是否删除，默认为0表示未删除"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
+    <el-form-item label="文件上传">
+      <el-upload
+        drag
+        :action="url"
+        :before-upload="beforeUploadHandle"
+        :on-success="successHandle"
+        multiple
+        :file-list="fileList" 
+        :limit="limit"
+        style="text-align: center;">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只支持jpg、png、gif格式的图片！</div>
+      </el-upload>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -38,20 +41,16 @@
     data () {
       return {
         visible: false,
+        url: '',
+        limit: 1,
+        fileList: [],
         dataForm: {
-          id: 0,
-          fileId: '',
           title: '',
           content: '',
           step: '',
-          isDelete: '',
-          createTime: '',
-          updateTime: ''
+          url: ''
         },
         dataRule: {
-          fileId: [
-            { required: true, message: '文件ID不能为空', trigger: 'blur' }
-          ],
           title: [
             { required: true, message: '小标题不能为空', trigger: 'blur' }
           ],
@@ -60,39 +59,27 @@
           ],
           step: [
             { required: true, message: '步骤顺序不能为空', trigger: 'blur' }
-          ],
-          isDelete: [
-            { required: true, message: '是否删除，默认为0表示未删除不能为空', trigger: 'blur' }
-          ],
-          createTime: [
-            { required: true, message: '创建时间不能为空', trigger: 'blur' }
-          ],
-          updateTime: [
-            { required: true, message: '更新时间不能为空', trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
       init (id) {
+        this.url = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
         this.dataForm.id = id || 0
         this.visible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/home/tutorial/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/common/home/tutorial/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.fileId = data.tutorial.fileId
                 this.dataForm.title = data.tutorial.title
                 this.dataForm.content = data.tutorial.content
                 this.dataForm.step = data.tutorial.step
-                this.dataForm.isDelete = data.tutorial.isDelete
-                this.dataForm.createTime = data.tutorial.createTime
-                this.dataForm.updateTime = data.tutorial.updateTime
               }
             })
           }
@@ -103,17 +90,13 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/home/tutorial/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/common/home/tutorial/${!this.dataForm.id ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
-                'id': this.dataForm.id || undefined,
-                'fileId': this.dataForm.fileId,
                 'title': this.dataForm.title,
                 'content': this.dataForm.content,
                 'step': this.dataForm.step,
-                'isDelete': this.dataForm.isDelete,
-                'createTime': this.dataForm.createTime,
-                'updateTime': this.dataForm.updateTime
+                'url' : this.dataForm.url
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
@@ -132,6 +115,24 @@
             })
           }
         })
+      },
+      // 上传之前
+      beforeUploadHandle (file) {
+        if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
+          this.$message.error('只支持jpg、png、gif格式的图片！')
+          return false
+        }
+        this.num++
+      },
+      // 上传成功
+      successHandle (response, file, fileList) {
+        this.fileList = fileList
+        if (response && response.code === 0) {
+          this.dataForm.url = response.url
+          console.log(this.dataForm)
+        } else {
+          this.$message.error(response.msg)
+        }
       }
     }
   }
