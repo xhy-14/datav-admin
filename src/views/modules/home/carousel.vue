@@ -6,6 +6,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
+        <el-button type="primary" @click="configHandle()">云存储配置</el-button>
         <el-button v-if="isAuth('home:carousel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('home:carousel:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
@@ -81,11 +82,14 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <!-- 弹窗, 云存储配置 -->
+    <config v-if="configVisible" ref="config"></config>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './carousel-add-or-update'
+  import Config from './oss-config.vue'
   export default {
     data () {
       return {
@@ -98,11 +102,13 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        configVisible: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      Config
     },
     activated () {
       this.getDataList()
@@ -112,7 +118,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/home/carousel/list'),
+          url: this.$http.adornUrl('/common/home/carousel/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -128,6 +134,13 @@
             this.totalPage = 0
           }
           this.dataListLoading = false
+        })
+      },
+      // 云存储配置
+      configHandle () {
+        this.configVisible = true
+        this.$nextTick(() => {
+          this.$refs.config.init()
         })
       },
       // 每页数
@@ -163,7 +176,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/home/carousel/delete'),
+            url: this.$http.adornUrl('/common/home/carousel/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
