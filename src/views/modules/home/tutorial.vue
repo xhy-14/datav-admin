@@ -130,7 +130,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/common/home/tutorial/list'),
+          url: this.$http.adornUrl('/sys/home/tutorial/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -188,7 +188,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/common/home/tutorial/delete'),
+            url: this.$http.adornUrl('/sys/home/tutorial/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {

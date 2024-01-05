@@ -118,7 +118,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/common/home/carousel/list'),
+          url: this.$http.adornUrl('/sys/home/carousel/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -176,7 +176,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/common/home/carousel/delete'),
+            url: this.$http.adornUrl('/sys/home/carousel/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
