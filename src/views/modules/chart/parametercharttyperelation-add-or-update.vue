@@ -13,15 +13,6 @@
     <el-form-item label="默认值" prop="defaultValue">
       <el-input v-model="dataForm.defaultValue" placeholder="默认值"></el-input>
     </el-form-item>
-    <el-form-item label="是否删除" prop="isDelete">
-      <el-input v-model="dataForm.isDelete" placeholder="是否删除"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
-    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>

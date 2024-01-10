@@ -4,23 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="用户id" prop="userId">
-      <el-input v-model="dataForm.userId" placeholder="用户id"></el-input>
-    </el-form-item>
-    <el-form-item label="文件类型名称" prop="name">
-      <el-input v-model="dataForm.name" placeholder="文件类型名称"></el-input>
+    <el-form-item label="项目名称" prop="name">
+      <el-input v-model="dataForm.name" placeholder="项目名称"></el-input>
     </el-form-item>
     <el-form-item label="描述" prop="depiction">
       <el-input v-model="dataForm.depiction" placeholder="描述"></el-input>
-    </el-form-item>
-    <el-form-item label="是否删除" prop="isDelete">
-      <el-input v-model="dataForm.isDelete" placeholder="是否删除"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

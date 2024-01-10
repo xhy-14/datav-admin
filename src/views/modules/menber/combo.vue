@@ -32,7 +32,7 @@
         prop="name"
         header-align="center"
         align="center"
-        label="套餐名称，唯一且不能为空">
+        label="套餐名称">
       </el-table-column>
       <el-table-column
         prop="price"
@@ -56,7 +56,7 @@
         prop="isDelete"
         header-align="center"
         align="center"
-        label="是否删除，默认为0表示未删除">
+        label="是否删除">
       </el-table-column>
       <el-table-column
         prop="createTime"

@@ -26,7 +26,7 @@
         prop="id"
         header-align="center"
         align="center"
-        label="文件类型ID">
+        label="项目ID">
       </el-table-column>
       <el-table-column
         prop="userId"
@@ -38,7 +38,7 @@
         prop="name"
         header-align="center"
         align="center"
-        label="文件类型名称">
+        label="项目名称">
       </el-table-column>
       <el-table-column
         prop="depiction"

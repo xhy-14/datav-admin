@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="套餐名称，唯一且不能为空" prop="name">
+    <el-form-item label="套餐名称" prop="name">
       <el-input v-model="dataForm.name" placeholder="套餐名称，唯一且不能为空"></el-input>
     </el-form-item>
     <el-form-item label="价格" prop="price">
@@ -15,15 +15,6 @@
     </el-form-item>
     <el-form-item label="折扣" prop="discount">
       <el-input v-model="dataForm.discount" placeholder="折扣"></el-input>
-    </el-form-item>
-    <el-form-item label="是否删除，默认为0表示未删除" prop="isDelete">
-      <el-input v-model="dataForm.isDelete" placeholder="是否删除，默认为0表示未删除"></el-input>
-    </el-form-item>
-    <el-form-item label="创建时间" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="更新时间" prop="updateTime">
-      <el-input v-model="dataForm.updateTime" placeholder="更新时间"></el-input>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -43,10 +34,7 @@
           name: '',
           price: '',
           term: '',
-          discount: '',
-          isDelete: '',
-          createTime: '',
-          updateTime: ''
+          discount: ''
         },
         dataRule: {
           name: [
@@ -60,15 +48,6 @@
           ],
           discount: [
             { required: true, message: '折扣不能为空', trigger: 'blur' }
-          ],
-          isDelete: [
-            { required: true, message: '是否删除，默认为0表示未删除不能为空', trigger: 'blur' }
-          ],
-          createTime: [
-            { required: true, message: '创建时间不能为空', trigger: 'blur' }
-          ],
-          updateTime: [
-            { required: true, message: '更新时间不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -90,9 +69,6 @@
                 this.dataForm.price = data.combo.price
                 this.dataForm.term = data.combo.term
                 this.dataForm.discount = data.combo.discount
-                this.dataForm.isDelete = data.combo.isDelete
-                this.dataForm.createTime = data.combo.createTime
-                this.dataForm.updateTime = data.combo.updateTime
               }
             })
           }
@@ -110,10 +86,7 @@
                 'name': this.dataForm.name,
                 'price': this.dataForm.price,
                 'term': this.dataForm.term,
-                'discount': this.dataForm.discount,
-                'isDelete': this.dataForm.isDelete,
-                'createTime': this.dataForm.createTime,
-                'updateTime': this.dataForm.updateTime
+                'discount': this.dataForm.discount
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
